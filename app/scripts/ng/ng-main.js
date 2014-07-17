@@ -8,7 +8,9 @@ app.controller('AppCtrl', ['$scope', '$rootScope', 'socket', function ($scope, $
     $rootScope.domIdRegistry = {};
     socket.on('runtime-data-direction-a', function (o) {
         for (i = 0; i < o.length; i += 1) {
-            $rootScope.domIdRegistry[o[i].id].val(o[i].value);
+            if ($rootScope.domIdRegistry[o[i].id]) {
+                $rootScope.domIdRegistry[o[i].id].val(o[i].value);
+            }
         }
     });
 }]);

@@ -8,11 +8,22 @@ var handler,
     path = require('path'),
     port = 1337,
     utilTimer,
+    k,
+    initGaugeType,
     widgetIdRegistry = {
-        gaugeType: ['gauge1', 'gauge2'],
         sliderType: ['slider1'],
-        numericType: ['numeric1']
+        numericType: ['numeric1'],
+        gaugeType: []
     };
+
+initGaugeType = function () {
+    'use strict';
+    for (k = 0; k < 50; k += 1) {
+        widgetIdRegistry.gaugeType.push('gauge' + k);
+        console.log('initGaugeType function');
+        console.log(widgetIdRegistry.gaugeType);
+    }
+};
 
 app.listen(port);
 
@@ -56,19 +67,21 @@ function handler(req, res) {
 //websocket implementation
 io.sockets.on('connection', function (socket) {
     "use strict";
+    initGaugeType();
     console.log(widgetIdRegistry);
     socket.emit('init', widgetIdRegistry); //change
     
     var rate = 1000,
         i,
+        j,
         data = [],
         randEmit = function () {
             //dummy data.  The contents of the data doesn't matter but the format of the object does. 
-            data = [
-                {id: widgetIdRegistry.gaugeType[0], value: Math.random() * 100},
-                {id: widgetIdRegistry.gaugeType[1], value: Math.random() * 100},
-                {id: widgetIdRegistry.numericType[0], value: Math.random() * 100}
-            ];
+            
+            data = [{widgetType: 'numericInput', id: widgetIdRegistry.numericType[0], value: Math.random() * 100}];
+            for (j = 0; j < widgetIdRegistry.gaugeType.length; j += 1) {
+                data.push({widgetType: 'gauge', id: widgetIdRegistry.gaugeType[j], value: Math.random() * 100});
+            }
             
             socket.emit('runtime-data-direction-a', data);
         };

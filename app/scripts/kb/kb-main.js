@@ -1,36 +1,62 @@
-/*global $, document, ko, modelModule, viewModelModule, socketModule, utilConstantsModule*/
+/*global $, document, ko, modelModule, viewModelModule, socketModule, utilConstantsModule, domIdRegistryModule*/
 
 $(document).ready(function () {
     'use strict';
-    var socket = socketModule.socket,
-        numericInput = $('#numericInput'),
-        rateSlider = $('#rateSlider'),
-        gauge1 = $('#gaugeContainer1'),
-        gauge2 = $('#gaugeContainer2'),
+    var i,
+        j,
+        socket = socketModule.socket,
         mm = modelModule,
         vmm = viewModelModule,
         utilConst = utilConstantsModule,
-        gauge1ViewModel,
-        gauge2ViewModel,
-        rateSliderViewModel,
-        numericInputViewModel;
+        instanceGaugeViewModels = [],
+        instanceNumericInputViewModels = [],
+        instanceSliderViewModels = [];
         
 //setup View Models
-    gauge1ViewModel = new vmm.GaugeViewModel(mm.gaugeModelOne);
-    gauge2ViewModel = new vmm.GaugeViewModel(mm.gaugeModelTwo);
-    rateSliderViewModel = new vmm.SliderViewModel(mm.sliderModel);
-    numericInputViewModel = new vmm.NumericInputViewModel(mm.numericInputModel);
+    for (i = 0; i < mm.gaugeModels.length; i += 1) {
+        instanceGaugeViewModels.push(new vmm.GaugeViewModel(mm.gaugeModels[i]));
+    }
+    
+    for (i = 0; i < mm.numericInputModels.length; i += 1) {
+        instanceNumericInputViewModels.push(new vmm.NumericInputViewModel(mm.numericInputModels[i]));
+    }
+    
+    for (i = 0; i < mm.sliderModels.length; i += 1) {
+        instanceSliderViewModels.push(new vmm.SliderViewModel(mm.sliderModels[i]));
+    }
     
 //bind ViewModels to View
-    ko.applyBindings(gauge1ViewModel, gauge1[0]);
-    ko.applyBindings(gauge2ViewModel, gauge2[0]);
-    ko.applyBindings(rateSliderViewModel, rateSlider[0]);
-    ko.applyBindings(numericInputViewModel, numericInput[0]);
+    for (i = 0; i < instanceGaugeViewModels.length; i += 1) {
+        ko.applyBindings(instanceGaugeViewModels[i], domIdRegistryModule.gaugeOutputs[i]);
+    }
+    
+    for (i = 0; i < instanceNumericInputViewModels.length; i += 1) {
+        ko.applyBindings(instanceNumericInputViewModels[i], domIdRegistryModule.numericInputs[i]);
+    }
+    
+    for (i = 0; i < instanceSliderViewModels.length; i += 1) {
+        ko.applyBindings(instanceSliderViewModels[i], domIdRegistryModule.sliderInputs[i]);
+    }
     
 //update models with incoming Web socket data
-    socket.on(utilConst.INCOMING_DATA, function (data) {
-        mm.gaugeModelOne.set({'value': data[0].value});
-        mm.gaugeModelTwo.set({'value': data[1].value});
-        mm.numericInputModel.set({'value': data[2].value});
+    socket.on(utilConst.INCOMING_DATA, function (o) {
+        for (i = 0; i < o.length; i += 1) {
+            switch (o[i].widgetType) {
+            case 'gauge':
+                for (j = 0; j < mm.gaugeModels.length; j += 1) {
+                    if (mm.gaugeModels[j].id === o[i].id) {
+                        mm.gaugeModels[j].set({'value': o[i].value});
+                    }
+                }
+                break;
+            case 'numericInput':
+                for (j = 0; j < mm.numericInputModels.length; j += 1) {
+                    if (mm.numericInputModels[j].id === o[i].id) {
+                        mm.numericInputModels[j].set({'value': o[i].value});
+                    }
+                }
+                break;
+            }
+        }
     });
 });

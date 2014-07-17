@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="app" ng-controller="AppCtrl">
     <head>
         <meta charset="utf-8">
         <title>benchmark research</title>
@@ -13,8 +13,8 @@
         <!-- endbower -->
         <!-- endbuild -->
         <!-- build:css(.tmp) styles/main.css -->
-        <link rel="stylesheet" href="styles/main.css">
         <link rel="stylesheet" href="scripts/pub/jqwidgets/styles/jqx.base.css">
+        <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
     </head>
     <body>
@@ -27,15 +27,23 @@
             <div class="header">
                 <ul class="nav nav-pills pull-right">
                     <li class="active"><a href="index.html">Home</a></li>
-                </ul>
-                <h3 class="text-muted">frameworkless benchmark</h3>
+                </ul>                
+                <h3 class="text-muted">angular benchmark</h3>
             </div>
 
             <div>
-                <div class="lv-numericinput"  id="numeric1"></div>
-                <div class="lv-gauge" id="gauge1"></div>
-                <div class="lv-gauge" id="gauge2"></div>
-                <div class="lv-slider" id="slider1"></div>
+                <div lv-numericinput id='numeric1'></div>
+                <div lv-gauge id='gauge0'></div>
+                <div lv-gauge id='gauge1'></div>
+                <div lv-gauge id='gauge2'></div>
+                <div lv-gauge id='gauge3'></div>
+                <div lv-gauge id='gauge4'></div>
+                <div lv-gauge id='gauge5'></div>
+                <div lv-gauge id='gauge6'></div>
+                <div lv-gauge id='gauge7'></div>
+                <div lv-gauge id='gauge8'></div>
+                <div lv-gauge id='gauge9'></div>
+                <div lv-slider id='slider1'></div>
             </div>
 
             <div class="footer">
@@ -77,13 +85,18 @@
         <!-- endbuild -->
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
-        <script src="scripts/main.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="scripts/pub/jqwidgets/jqx-all.js" type="text/javascript"></script>
-        <script src="scripts/utils/dom-registry.js" type="application/javascript"></script>
+<!--        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+<!--        <script src="https://code.angularjs.org/1.2.9/angular.js"></script>-->
+        
+        <script src="scripts/pub/angular.min.js" type="text/javascript"></script>
         <script src="scripts/pub/socket.io/socket.io.js" type="text/javascript"></script>
-        <script src="scripts/utils/util-constants.js" type="text/javascript"></script>
-        <script src="scripts/fl/fl-main.js" type="text/javascript"></script>
+        <script src="scripts/pub/jqwidgets/jqx-all.js" type="text/javascript"></script>
+        <script src="scripts/ng/directives/gauge.js" type="text/javascript"></script>
+        <script src="scripts/ng/directives/numeric-input.js" type="text/javascript"></script>
+        <script src="scripts/ng/directives/slider.js" type="text/javascript"></script>
+        <script src="scripts/ng/services/socket-service.js" type="text/javascript"></script>
+        <script src="scripts/ng/ng-main.js" type="text/javascript"></script>
+        <script src="scripts/main.js"></script>
         <!-- endbuild -->
 </body>
 </html>

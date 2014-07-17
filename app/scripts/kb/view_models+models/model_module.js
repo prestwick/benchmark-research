@@ -1,44 +1,45 @@
-/*global Backbone*/
+/*global Backbone, domIdRegistryModule*/
 /*jshint unused: false */
 
 //In the module there is one Model for each unique widget instance.
 var modelModule = (function () {
     'use strict';
-    var gaugeModelOne,
-        gaugeModelTwo,
-        numericInputModel,
-        sliderModel;
+    var i,
+        gaugeModels = [],
+        numericInputModels = [],
+        sliderModels = [];
     
-    gaugeModelOne = new Backbone.Model({
-        value: 0,
-        min: 0,
-        max: 100,
-        disabled: false
-    });
+    for (i = 0; i < domIdRegistryModule.gaugeOutputs.length; i += 1) {
+        gaugeModels.push(new Backbone.Model({
+            value: 0,
+            min: 0,
+            max: 100,
+            disabled: false,
+            id: domIdRegistryModule.gaugeOutputs[i].id
+        }));
+    }
     
-    gaugeModelTwo = new Backbone.Model({
-        value: 0,
-        min: 0,
-        max: 250,
-        disabled: false
-    });
+    for (i = 0; i < domIdRegistryModule.numericInputs.length; i += 1) {
+        numericInputModels.push(new Backbone.Model({
+            value: 0,
+            disabled: false,
+            id: domIdRegistryModule.numericInputs[i].id
+        }));
+    }
     
-    numericInputModel = new Backbone.Model({
-        value: 0,
-        disabled: false
-    });
-    
-    sliderModel = new Backbone.Model({
-        value: 1000,
-        min: 0,
-        max: 1000,
-        disabled: false
-    });
-    
+    for (i = 0; i < domIdRegistryModule.sliderInputs.length; i += 1) {
+        sliderModels.push(new Backbone.Model({
+            value: 1000,
+            min: 0,
+            max: 1000,
+            disabled: false,
+            id: domIdRegistryModule.sliderInputs[i].id
+        }));
+    }
+
     return {
-        gaugeModelOne: gaugeModelOne,
-        gaugeModelTwo: gaugeModelTwo,
-        numericInputModel: numericInputModel,
-        sliderModel: sliderModel
+        gaugeModels: gaugeModels,
+        numericInputModels: numericInputModels,
+        sliderModels: sliderModels
     };
 }());
