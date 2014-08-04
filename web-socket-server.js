@@ -16,14 +16,9 @@ var handler,
         gaugeType: []
     };
 
-initGaugeType = function () {
-    'use strict';
-    for (k = 0; k < 50; k += 1) {
-        widgetIdRegistry.gaugeType.push('gauge' + k);
-        console.log('initGaugeType function');
-        console.log(widgetIdRegistry.gaugeType);
-    }
-};
+for (k = 0; k < 50; k += 1) {
+    widgetIdRegistry.gaugeType.push('gauge' + k);
+}
 
 app.listen(port);
 
@@ -67,8 +62,8 @@ function handler(req, res) {
 //websocket implementation
 io.sockets.on('connection', function (socket) {
     "use strict";
-    initGaugeType();
-    console.log(widgetIdRegistry);
+    //initGaugeType();
+    console.log('connection called');
     socket.emit('init', widgetIdRegistry); //change
     
     var rate = 1000,
@@ -77,7 +72,6 @@ io.sockets.on('connection', function (socket) {
         data = [],
         randEmit = function () {
             //dummy data.  The contents of the data doesn't matter but the format of the object does. 
-            
             data = [{widgetType: 'numericInput', id: widgetIdRegistry.numericType[0], value: Math.random() * 100}];
             for (j = 0; j < widgetIdRegistry.gaugeType.length; j += 1) {
                 data.push({widgetType: 'gauge', id: widgetIdRegistry.gaugeType[j], value: Math.random() * 100});

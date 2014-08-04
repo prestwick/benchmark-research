@@ -9,7 +9,7 @@ angular.module('slider-directive', [])
                 $element.jqxSlider({ min: 0, max: 1000, ticksFrequency: 100, value: 1000, step: 5});
                 $element.on('slideEnd', function (event) {
                     var value = event.args.value;
-                    socket.emit(utilConstantsModule.OUTGOING_DATA, {rate: value});
+                    socket.emit('runtime-data-direction-b', {rate: value});
                 });
             }
         };

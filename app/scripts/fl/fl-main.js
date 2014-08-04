@@ -31,9 +31,15 @@ $(document).ready(function () {
 //websocket implementation
     socket.on(utilConst.INCOMING_DATA, function (o) {
         for (i = 0; i < o.length; i += 1) {
-            if ($(o[i].id)) {
-                $('#' + o[i].id).val(o[i].value);
+            if (domIdRegistryModule.domIdLookup(o[i].id)) {
+                domIdRegistryModule.domIdLookup(o[i].id).val(o[i].value);
             }
         }
+    });
+    
+    socket.on('disconnect', function () {
+        $('#disconnect-modal').modal({
+            show: true
+        });
     });
 });
